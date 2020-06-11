@@ -13,8 +13,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Tile
+  - PuzzleObject
   - 
   - 
   - 
@@ -40,4 +40,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Tile
+    uniqueID: 4068417627
+    locked: 0
+  - name: PuzzleObject
+    uniqueID: 3061107895
     locked: 0
