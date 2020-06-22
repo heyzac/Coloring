@@ -4,20 +4,34 @@ using UnityEngine;
 
 public class Inputer : TileObject
 {
-    void Start()
+    private void Start()
     {
         First();
-        Initialization();
+        ValueInitialization();
         TileStatement();
+        Statement();
     }
 
-    private void Initialization()
+    private void ValueInitialization()
     {
-        objectType = 3;
+        objectType = PuzzleIn.INPUTER_TYPE;
     }
 
-    private void Input()
+    private void Statement()
     {
+        Spritement();
+    }
 
+    private void Spritement()
+    {
+        colorTheme = PuzzleIn.nowTheme;
+    }
+
+    public void Input()
+    {
+        Debug.Log("Inputer has been Operated");
+        //스프라이트 교체
+        //방향 검사
+        //색 검사
     }
 }

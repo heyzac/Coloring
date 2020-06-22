@@ -15,9 +15,8 @@ public class Object : MonoBehaviour
     protected float xReal;
     protected float yReal;
 
-    //스프라이트 선언
-    protected Sprite spriteNormal;
-    protected Sprite spriteSelect;
+    //스프라이트 및 이미지 값
+    public int colorTheme;
 
     //게임 오브젝트 선언
 
@@ -49,32 +48,31 @@ public class Object : MonoBehaviour
 
     private void PositionInit()
     {
-        pos = GetPosition();
-        transform.position = GetRealPosition(pos.x, pos.y);
+        transform.position = GetRealPosition();
     }
     private void RotatementInit()
     {
         Quaternion quart;
-        quart = Quaternion.Euler(0, 0, 90 * rotate);
-        GetComponent<Transform>().rotation = quart;
+        quart = GetRotation();
+        GetComponent<Transform>().rotation= quart;
     }
 
     public Vector3Int GetPosition()
     {
-        return new Vector3Int(x, y, z);
+        pos = new Vector3Int(x, y, z);
+        return pos;
     }
-
-    public Vector3 GetRealPosition(int xx, int yy)
+ 
+    public Vector3 GetRealPosition()
     {
-        xReal = (xx * 1.08f) + 0.5f;
-        yReal = (yy * 1.08f) + 0.5f;
+        GetPosition();
+        xReal = (this.x * grid.argumentedCellSize) + PuzzleIn.gridAdjusment;
+        yReal = (this.y * grid.argumentedCellSize) + PuzzleIn.gridAdjusment;
         return new Vector3(xReal, yReal, 0);
     }
 
     public Quaternion GetRotation()
     {
-        Quaternion quart;
-        quart = Quaternion.Euler(0, 0, 90 * rotate);        
-        return quart;
+        return Quaternion.Euler(0, 0, -90 * rotate);
     }
 }

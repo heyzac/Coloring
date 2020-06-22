@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EmptyTile : TileObject
 {
-    void Start()
+    private void Start()
     {
         First();
         Initialization();
@@ -13,6 +13,6 @@ public class EmptyTile : TileObject
 
     private void Initialization()
     {
-        objectType = 0;
+        objectType = PuzzleIn.EMPTY_TYPE;
     }
 }

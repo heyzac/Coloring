@@ -3,22 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 public class PuzzleObject : Object,
     IBeginDragHandler, IDragHandler, IEndDragHandler,
     IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
-    private static bool _isMouseDragging = false;
-    private static bool _isMousePressing = false;
+    public delegate void LineStatement();
+    public static event LineStatement OutputerLining;
 
     //다유동 변수
     private Ray _rayment;
     private int _xTemp;
     private int _yTemp;
 
-    public void ObjectStatement()
+    //스프라이트 값 관련
+    [SerializeField] protected Sprite spriteNormal;
+    [SerializeField] protected Sprite spriteSelect;
+    [SerializeField] protected Sprite spriteOnLine;
+
+    protected void ObjectStatement()
     {
         ObjectSpritement();
         ObjectMovement();
@@ -44,17 +48,6 @@ public class PuzzleObject : Object,
         //    return true;
 
         return false;
-
-        //GameObject tileGB = grid.tileMapArray[v3.x, v3.y];
-        //GameObject objGB = grid.objectMapArray[v3.x, v3.y];
-
-        //if (tileGB == null) return false;
-        //else if (objGB == null) return true;
-        //else if (objGB.GetComponent<Object>().objectType != 0) return true;
-        //else if (tileGB.GetComponent<Object>().objectType != 0) return true;
-
-        //return false;
-
     }
     private void ObjectPositionSetMouse()
     {
@@ -71,56 +64,65 @@ public class PuzzleObject : Object,
             y = _yTemp;
 
             ObjectMovement();
+            return;
         }
     }
+
     private void ObjectMovement()
     {
-        Debug.Log("IsMoveablePosition");
-
-        xReal = (x + (float)0.5) * grid.argumentedCellSize;
-        yReal = (y + (float)0.5) * grid.argumentedCellSize;
+        xReal = (x * grid.argumentedCellSize) + PuzzleIn.gridAdjusment;
+        yReal = (y * grid.argumentedCellSize) + PuzzleIn.gridAdjusment;
 
         Vector3 realPos = new Vector3(xReal, yReal, z);
         GetComponent<RectTransform>().position = realPos;
     }
-    private void ObjectSpritement()
+    public void ObjectSpritement()
     {
         Sprite img;
 
-        if (!_isMousePressing)
+        if (!PuzzleIn.isMousePressing)
             img = spriteNormal;
         else
             img = spriteSelect;
 
         GetComponent<Image>().sprite = img;
     }
-
     private void ObjectRotatement()
     {
-        if (!_isMouseDragging)
+        if (!PuzzleIn.isMouseDragging)
         {
-            if (++rotate == 4)
-                rotate = 0;
-
-            Quaternion quart;
-            quart = Quaternion.Euler(0, 0, 90 * rotate);
-            GetComponent<Transform>().rotation = quart;
+            rotate = grid.RotateOverflow(++rotate);
+            GetComponent<Transform>().rotation = Quaternion.Euler(0, 0, -90 * rotate);
+        }
+    }
+    private void ZPositionSetting()
+    {
+        if (PuzzleIn.isMousePressing)
+        {
+            z = 1;
+            GetPosition();
+        }
+        else
+        {
+            z = 0;
+            GetPosition();
         }
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         ObjectRotatement();
+        MouseClick();
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        _isMousePressing = true;
-        MouseDown();
+        PuzzleIn.isMousePressing = true;
+        MouseClick();
     }
     public void OnPointerUp(PointerEventData eventData)
     {
-        _isMousePressing = false;
-        MouseDown();
+        PuzzleIn.isMousePressing = false;
+        MouseClick();
     }
     public void OnDrag(PointerEventData eventData)
     {
@@ -128,37 +130,23 @@ public class PuzzleObject : Object,
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
-        _isMouseDragging = true;
+        PuzzleIn.isMouseDragging = true;
         MouseDrag();
-        Debug.Log("오브젝트 드래그 시작 ");
     }
     public void OnEndDrag(PointerEventData eventData)
     {
-        _isMouseDragging = false;
+        PuzzleIn.isMouseDragging = false;
         MouseDrag();
-        Debug.Log("오브젝트 드래그 종료");
     }
-
     private void MouseDrag()
     {
 
     }
-
-    private void MouseDown()
+    private void MouseClick()
     {
         ObjectSpritement();
         ZPositionSetting();
-    }
 
-    private void ZPositionSetting()
-    {
-        if (_isMousePressing)
-        {
-            transform.position = new Vector3(xReal, yReal, -1);
-        }
-        else
-        {
-            transform.position = new Vector3(xReal, yReal, 0);
-        }
+        OutputerLining();
     }
 }

@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class Outputer : TileObject
 {
-    void Start()
+    public int lineColorTheme = 1;
+
+    private Line line;
+
+    private void Start()
     {
         First();
         Initialization();
@@ -13,10 +17,12 @@ public class Outputer : TileObject
 
     private void Initialization()
     {
-        objectType = 2;
+        line = transform.GetChild(0).GetComponent<Line>();
+        line.grid = this.grid;
+        objectType = PuzzleIn.OUTPUTER_TYPE;
     }
 
-    private void Output()
+    public void Output()
     {
 
     }

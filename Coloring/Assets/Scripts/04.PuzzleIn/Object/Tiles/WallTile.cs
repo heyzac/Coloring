@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WallTile : TileObject
 {
-    void Start()
+    private void Start()
     {
         First();
         TileStatement();
@@ -13,6 +13,6 @@ public class WallTile : TileObject
 
     private void Initialization()
     {
-        objectType = 1;
+        objectType = PuzzleIn.WALL_TYPE;
     }
 }
