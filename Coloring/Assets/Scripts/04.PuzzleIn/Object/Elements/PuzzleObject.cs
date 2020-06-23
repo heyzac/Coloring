@@ -24,9 +24,21 @@ public class PuzzleObject : Object,
 
     protected void ObjectStatement()
     {
-        ObjectSpritement();
+        EventInitialization();
+        ObjectSpriteInit();
         ObjectMovement();
+
         SaveObject();
+    }
+
+    private void ObjectSpriteInit()
+    {
+        GetComponent<Image>().sprite = spriteNormal;
+    }
+
+    private void EventInitialization()
+    {
+        PuzzleIn.LineBegin += ObjectSpriteInit;
     }
 
     private void SaveObject()
@@ -147,6 +159,7 @@ public class PuzzleObject : Object,
         ObjectSpritement();
         ZPositionSetting();
 
+        PuzzleIn.Lines();
         OutputerLining();
     }
 }

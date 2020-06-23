@@ -66,7 +66,7 @@ public class Line : MonoBehaviour
                 break;
             //green
             case 2:
-                color = new Color(0.7058824f, 0.7803922f, 0.9058824f);
+                color = new Color(0.6509804f, 0.8705883f, 0.6352941f);
                 break;
             //yellow
             case 3:
@@ -201,9 +201,11 @@ public class Line : MonoBehaviour
 
             //Inputer
             case 3:
-                if(obj.GetComponent<Inputer>().colorTheme == _lineColorTheme)
+                if(obj.GetComponent<Inputer>().lineColorTheme == _lineColorTheme &&
+                    obj.GetComponent<Inputer>().rotate == grid.RotateOverflow(_lineDirect + 2))
                 {
                     obj.GetComponent<Inputer>().Input();
+                    LineEnd(obj);
                     break;
                 }
                 LineEnd(obj);

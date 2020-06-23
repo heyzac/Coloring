@@ -19,11 +19,6 @@ public class Reflector : PuzzleObject
 
     }
 
-    private void Init()
-    {
-        GetComponent<Image>().sprite = spriteNormal;
-    }
-
     private void VariableInitialization()
     {
         objectType = PuzzleIn.REFLECTOR_TYPE;
@@ -43,9 +38,10 @@ public class Reflector : PuzzleObject
         return result;
     }
 
-    public void SpriteChangeFromLine(int colorTheme)
+    public void SpriteChangeFromLine(int lineColorTheme)
     {
-        spriteOnLine = puzzleIn.reflectorOnLine[colorTheme];
-        gameObject.GetComponent<Image>().sprite = spriteOnLine;
+        Debug.Log("hey");
+        spriteOnLine = puzzleIn.reflectorOnLine[lineColorTheme];
+        GetComponent<Image>().sprite = spriteOnLine;
     }
 }

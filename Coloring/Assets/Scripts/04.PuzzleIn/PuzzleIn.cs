@@ -9,6 +9,7 @@ public class PuzzleIn : MonoBehaviour
     //이벤트 핸들러
     public delegate void GameStatement();
     public static event GameStatement LoadComplete;
+    public static event GameStatement LineBegin;
 
     //수 많은 상수
     private const int MAX_THEME_COUNT = 3;
@@ -43,8 +44,8 @@ public class PuzzleIn : MonoBehaviour
     public Sprite[] inputerObject;
 
     //on line
-        //public Sprite[] outputerOnLine;
-        //public Sprite[] inputerOnLine;
+    public Sprite[] outputerOnLine;
+    public Sprite[] inputerOnLine;
     public Sprite[] reflectorOnLine;
     public Sprite[] inputerObjectOnLine;
 
@@ -64,8 +65,8 @@ public class PuzzleIn : MonoBehaviour
         Array.Resize<Sprite>(ref reflector, MAX_THEME_COUNT);
         Array.Resize<Sprite>(ref inputerObject, MAX_THEME_COUNT);
 
-        //Array.Resize<Sprite>(ref outputerOnLine, MAX_LINE_COLOR_COUNT);
-        //Array.Resize<Sprite>(ref inputerOnLine, MAX_LINE_COLOR_COUNT);
+        Array.Resize<Sprite>(ref outputerOnLine, MAX_LINE_COLOR_COUNT);
+        Array.Resize<Sprite>(ref inputerOnLine, MAX_LINE_COLOR_COUNT);
         Array.Resize<Sprite>(ref reflectorOnLine, MAX_LINE_COLOR_COUNT);
         Array.Resize<Sprite>(ref inputerObjectOnLine, MAX_LINE_COLOR_COUNT);
 
@@ -76,6 +77,11 @@ public class PuzzleIn : MonoBehaviour
     void Start()
     {
         LoadComplete();
+    }
+
+    public static void Lines()
+    {
+        LineBegin();
     }
 
 }

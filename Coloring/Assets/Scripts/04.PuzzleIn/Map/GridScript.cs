@@ -37,6 +37,14 @@ public class GridScript : MonoBehaviour
         //LoadLevel();
     }
 
+    public void ObjectInit()
+    {
+        foreach(GameObject obj in objectList)
+        {
+            obj.GetComponent<PuzzleObject>().ObjectSpritement();
+        }
+    }
+
     public GameObject GetObjectWithPosition(Vector3Int v3)
     {
         for (int i = 0; i < objectList.Count; i++)

@@ -16,7 +16,7 @@ public class Object : MonoBehaviour
     protected float yReal;
 
     //스프라이트 및 이미지 값
-    public int colorTheme;
+    protected int colorTheme;
 
     //게임 오브젝트 선언
 

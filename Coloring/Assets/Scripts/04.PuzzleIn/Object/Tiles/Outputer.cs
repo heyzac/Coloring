@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Outputer : TileObject
 {
-    public int lineColorTheme = 1;
+    public int lineColorTheme;
 
     private Line line;
 
@@ -13,6 +14,7 @@ public class Outputer : TileObject
         First();
         Initialization();
         TileStatement();
+        Spritement();
     }
 
     private void Initialization()
@@ -25,5 +27,10 @@ public class Outputer : TileObject
     public void Output()
     {
 
+    }
+
+    private void Spritement()
+    {
+        GetComponent<Image>().sprite = puzzleIn.outputerOnLine[lineColorTheme];
     }
 }

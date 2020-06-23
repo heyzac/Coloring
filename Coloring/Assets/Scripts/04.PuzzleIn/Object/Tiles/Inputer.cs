@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Inputer : TileObject
 {
+    public int lineColorTheme;
+
     private void Start()
     {
         First();
@@ -24,14 +27,11 @@ public class Inputer : TileObject
 
     private void Spritement()
     {
-        colorTheme = PuzzleIn.nowTheme;
+        GetComponent<Image>().sprite = puzzleIn.inputerOnLine[lineColorTheme];
     }
 
     public void Input()
     {
         Debug.Log("Inputer has been Operated");
-        //스프라이트 교체
-        //방향 검사
-        //색 검사
     }
 }
