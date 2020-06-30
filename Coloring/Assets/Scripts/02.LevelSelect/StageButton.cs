@@ -5,13 +5,7 @@ using UnityEngine;
 public class StageButton : MonoBehaviour
 {
     //변수 선언
-    public LevelSelect levelSelect = new LevelSelect();
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public LevelSelect levelSelect;
 
     public void OnClickStageButton(int arrowType)
     {
@@ -21,7 +15,7 @@ public class StageButton : MonoBehaviour
 
     private void StageSelect(int arrowType)
     {
-        levelSelect.presentStage += arrowType;
+        LevelSelect.presentStage += arrowType;
     }
 
 }

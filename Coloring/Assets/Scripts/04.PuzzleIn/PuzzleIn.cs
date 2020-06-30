@@ -8,7 +8,7 @@ public class PuzzleIn : MonoBehaviour
 {
     //이벤트 핸들러
     public delegate void GameStatement();
-    public static event GameStatement LoadComplete;
+    public static event GameStatement ObjectLoad;
     public static event GameStatement LineBegin;
 
     //수 많은 상수
@@ -25,14 +25,14 @@ public class PuzzleIn : MonoBehaviour
     public const int INPUTER_OBJECT_TYPE = 5;
 
     //수 많은(예정) 전역 변수
+    public static int currentStage;
+    public static int currentLevel;
+    public static int nowTheme = 0;
     public static float gridAdjusment = 0.5f;
 
     //상태 전역 변수
     public static bool isMouseDragging = false;
     public static bool isMousePressing = false;
-
-    public static int currentLevel = 0;
-    public static int nowTheme = 0;
 
     //스프라이트 저장 배열
     //default
@@ -73,15 +73,20 @@ public class PuzzleIn : MonoBehaviour
         Array.Resize<Sprite>(ref reflectorSelect, MAX_THEME_COUNT);
         Array.Resize<Sprite>(ref inputerObjectSelect, MAX_THEME_COUNT);
     }
-
     void Start()
     {
+        Lines();
         LoadComplete();
     }
 
     public static void Lines()
     {
         LineBegin();
+    }
+    public static void LoadComplete()
+    {
+        if (ObjectLoad != null)
+            ObjectLoad();
     }
 
 }

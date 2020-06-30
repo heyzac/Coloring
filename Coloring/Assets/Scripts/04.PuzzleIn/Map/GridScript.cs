@@ -6,25 +6,26 @@ using UnityEngine;
 public class GridScript : MonoBehaviour
 {
     //참조 목적의 수많은(예정) 변수들
-    public int currentStage;
-    public int currentLevel;
     public float argumentedCellSize;
 
     //클래스 선언
     public MapData levelData;
     private PuzzleIn puzzleIn;
 
+    //변수 선언
+    public int mapHeight;
+    public int mapWeight;
+    public int completeRequires;
+    public int inputerOperating;
+
     //게임 오브젝트
     public List<GameObject> elementList = new List<GameObject>();
     public List<GameObject> objectList = new List<GameObject>();
     public List<GameObject> tileList = new List<GameObject>();
 
-    //변수 선언
-    public int mapHeight;
-    public int mapWeight;
-
     private void Awake()
     {
+        EventInitialization();
         puzzleIn = GameObject.Find("ScriptObject").GetComponent<PuzzleIn>();
         argumentedCellSize = GetComponent<Grid>().cellSize.x;
     }
@@ -32,43 +33,23 @@ public class GridScript : MonoBehaviour
     private void Start()
     {
         levelData = ScriptableObject.CreateInstance<MapData>();
-        currentLevel = 1;
-        levelData = (MapData)AssetDatabase.LoadAssetAtPath("Assets/Resources/Levels/Level" + currentLevel + ".asset", typeof(MapData));
-        //LoadLevel();
-    }
-
-    public void ObjectInit()
-    {
-        foreach(GameObject obj in objectList)
+        if (PuzzleIn.currentStage + 1 == 0 || PuzzleIn.currentLevel + 1 == 0)
         {
-            obj.GetComponent<PuzzleObject>().ObjectSpritement();
+            Debug.LogWarning("Level " + (PuzzleIn.currentStage + 1) + "-" + (PuzzleIn.currentLevel + 1) + "cannot Found");
         }
+        levelData = (MapData)AssetDatabase.LoadAssetAtPath
+            ("Assets/Resources/Levels/Level " + (PuzzleIn.currentStage + 1) + "-" + (PuzzleIn.currentLevel + 1) + ".asset", typeof(MapData));
+        LoadLevel();
     }
 
-    public GameObject GetObjectWithPosition(Vector3Int v3)
+    private void EventInitialization()
     {
-        for (int i = 0; i < objectList.Count; i++)
-        {
-            if (objectList[i].GetComponent<Object>().GetPosition() == v3)
-            {
-                return objectList[i];
-            }
-        }
-        return null;
+        PuzzleIn.LineBegin += InputerOperationCountInit;
     }
-
-    public GameObject GetTileWithPosition(Vector3Int v3)
+    private void InputerOperationCountInit()
     {
-        for (int i = 0; i < tileList.Count; i++)
-        {
-            if (tileList[i].GetComponent<Object>().GetPosition() == v3)
-            {
-                return tileList[i];
-            }
-        }
-        return null;
+        inputerOperating = 0;
     }
-
     public void GetMapMaximumSize()
     {
         int tempPos;
@@ -102,7 +83,6 @@ public class GridScript : MonoBehaviour
     {
         CreateAsset();
     }
-
     private void CreateAsset()
     {
         string filePath = Application.dataPath + "/Resources/Levels";
@@ -118,16 +98,55 @@ public class GridScript : MonoBehaviour
         Object obj;
         for (int i = 0; i < tileList.Count; i++)
         {
-            obj = tileList[i].GetComponent<Object>();
-            map.tiles.Add(new LoadingObject(obj.x, obj.y, obj.rotate, obj.objectType));
-            map.elements.Add(new LoadingObject(obj.x, obj.y, obj.rotate, obj.objectType));
-        }
+            obj = tileList[i].GetComponent<TileObject>();
 
+            switch (obj.objectType)
+            {
+                case 0:
+                    LoadingEmpty empty = new LoadingEmpty(obj as EmptyTile);
+                    empty.Init(obj.x, obj.y, obj.rotate, obj.objectType);
+                    map.tiles.Add(empty);
+                    map.elements.Add(empty);
+                    break;
+                case 1:
+                    LoadingWall wall = new LoadingWall(obj as WallTile);
+                    wall.Init(obj.x, obj.y, obj.rotate, obj.objectType);
+                    map.tiles.Add(wall);
+                    map.elements.Add(wall);
+                    break;
+                case 2:
+                    LoadingOutputer outputer = new LoadingOutputer(obj as Outputer);
+                    outputer.Init(obj.x, obj.y, obj.rotate, obj.objectType);
+                    map.tiles.Add(outputer);
+                    map.elements.Add(outputer);
+                    break;
+                case 3:
+                    LoadingInputer inputer = new LoadingInputer(obj as Inputer);
+                    inputer.Init(obj.x, obj.y, obj.rotate, obj.objectType);
+                    map.tiles.Add(inputer);
+                    map.elements.Add(inputer);
+                    break;
+            }
+        }
         for (int i = 0; i < objectList.Count; i++)
         {
-            obj = objectList[i].GetComponent<Object>();
-            map.objects.Add(new LoadingObject(obj.x, obj.y, obj.rotate, obj.objectType));
-            map.elements.Add(new LoadingObject(obj.x, obj.y, obj.rotate, obj.objectType));
+            obj = objectList[i].GetComponent<PuzzleObject>();
+
+            switch (obj.objectType)
+            {
+                case 4:
+                    LoadingReflector reflector = new LoadingReflector(obj as Reflector);
+                    reflector.Init(obj.x, obj.y, obj.rotate, obj.objectType);
+                    map.objects.Add(reflector);
+                    map.elements.Add(reflector);
+                    break;
+                case 5:
+                    LoadingInputerObject inputerObject = new LoadingInputerObject(obj as InputerObject);
+                    inputerObject.Init(obj.x, obj.y, obj.rotate, obj.objectType);
+                    map.objects.Add(inputerObject);
+                    map.elements.Add(inputerObject);
+                    break;
+            }
         }
 
         string fileName = string.Format("Assets/Resources/Levels/Level{1}.asset", filePath, name);
@@ -157,40 +176,28 @@ public class GridScript : MonoBehaviour
             return;
         }
         ObjectLoading();
+        //PuzzleIn.LoadComplete();
     }
-
     private void ObjectLoading()
     {
         for (int i = elementList.Count - 1; i >= 0; i--)
-        {
-            Destroy(elementList[i]);
+        {            
+            Destroy(elementList[i].gameObject);
         }
 
         elementList.Clear();
         tileList.Clear();
         objectList.Clear();
 
-        foreach (LoadingObject v in levelData.tiles)
+        foreach (LoadingObject v in levelData.elements)
         {
             Object obj = ObjectCreate(v);
-            obj.First();
-            tileList.Add(obj.gameObject);
-            elementList.Add(obj.gameObject);
-        }
-
-        foreach (LoadingObject v in levelData.objects)
-        {
-            Object obj = ObjectCreate(v);
-            obj.First();
-            objectList.Add(obj.gameObject);
-            elementList.Add(obj.gameObject);
+            obj.SaveObject();
         }
 
         GetMapMaximumSize();
         //TileArrayment();
         //ObjectArrayment();
-
-        Debug.Log("Load Complete! Element List's Count : " + elementList.Count);
     }
     public Object ObjectCreate(LoadingObject obj)
     {
@@ -210,11 +217,15 @@ public class GridScript : MonoBehaviour
         instance.GetComponent<Object>().y = obj.y;
         instance.GetComponent<Object>().rotate = obj.rotate;
         instance.GetComponent<Object>().objectType = obj.objectType;
+        if (obj.objectType == 2)
+            instance.GetComponent<Outputer>().lineColorTheme = obj.lineColorTheme;
+        if (obj.objectType == 3)
+            instance.GetComponent<Inputer>().lineColorTheme = obj.lineColorTheme;
 
         return instance.GetComponent<Object>();
     }
 
-    private void TileArrayment()
+    /*private void TileArrayment()
     {
         TileObject tileObject;
         for (int i = 0; i < tileList.Count; i++)
@@ -229,7 +240,7 @@ public class GridScript : MonoBehaviour
         {
             puzzleObject = objectList[i].GetComponent<PuzzleObject>();
         }
-    }
+    }*/
 
     public int RotateOverflow(int rotate)
     {
@@ -244,9 +255,30 @@ public class GridScript : MonoBehaviour
 
         return rotate;
     }
-
     private bool IsAllowRotate(int rotate)
     {
         return (rotate >= 0 && rotate <= 3);
+    }
+    public GameObject GetObjectWithPosition(Vector3Int v3)
+    {
+        for (int i = 0; i < objectList.Count; i++)
+        {
+            if (objectList[i].GetComponent<Object>().GetPosition() == v3)
+            {
+                return objectList[i];
+            }
+        }
+        return null;
+    }
+    public GameObject GetTileWithPosition(Vector3Int v3)
+    {
+        for (int i = 0; i < tileList.Count; i++)
+        {
+            if (tileList[i].GetComponent<Object>().GetPosition() == v3)
+            {
+                return tileList[i];
+            }
+        }
+        return null;
     }
 }

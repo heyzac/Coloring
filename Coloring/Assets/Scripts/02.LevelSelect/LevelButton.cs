@@ -8,31 +8,30 @@ using UnityEngine.SceneManagement;
 public class LevelButton : MonoBehaviour
 {
     //클래스 선언
-    public Stage stage = new Stage();
+    public Stage stage;
 
     //변수 선언
     private bool isCleared;
     public int levelNumber;
 
     //게임오브젝트 선언
-    public GameObject thisLevelObject;
     public GameObject levelTextObject;
 
-    void Awake()
+    private void Start()
     {
-        
+        Initialization();
+        TextSetting();
     }
 
-    void Start()
+    private void Initialization()
     {
-        TextSetting();
+        stage = transform.GetComponentInParent<Stage>();
+        levelTextObject = transform.GetChild(0).gameObject;
     }
 
     private void TextSetting()
     {
-        //levelTextObject = transform.Find("Text").gameObject;
         levelTextObject.GetComponent<Text>().text = "" + (levelNumber + 1);
-
     }
 
     //클리어 여부에 따라 행동을 결정
@@ -53,6 +52,8 @@ public class LevelButton : MonoBehaviour
     public void OnLevelButtonClick()
     {
         //사전 작업
+        PuzzleIn.currentStage = stage.stageNumber;
+        PuzzleIn.currentLevel = levelNumber;
 
         //로딩씬 로드
         SceneManager.LoadScene("SceneLoading");

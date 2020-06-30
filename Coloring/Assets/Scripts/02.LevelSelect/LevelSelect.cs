@@ -10,7 +10,7 @@ public class LevelSelect : MonoBehaviour
     public const int STAGE_MAX_COUNT = 3;
 
     //전역 변수 선언
-    public int presentStage = 0;
+    public static int presentStage = 0;
     public GameObject[] stages;
 
     //이미지 스프라이트
@@ -20,12 +20,12 @@ public class LevelSelect : MonoBehaviour
     public Sprite[] stageRightArrowImageArr;
     public Sprite[] stageLeftArrowImageArr;
 
-    void Awake()
+    private void Awake()
     {
         Initialization();
     }
 
-    void Start()
+    private void Start()
     {
         StageActivation();
     }

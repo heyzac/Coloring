@@ -22,13 +22,17 @@ public class Object : MonoBehaviour
 
     //컴포넌트 선언
     protected Tilemap tilemap;
-    protected GridScript grid;
+    public GridScript grid;
     protected PuzzleIn puzzleIn;
     protected MapData mapData;
 
-    public void First()
+    public void Awake()
     {
         Initialization();
+    }
+    public void First()
+    {
+        //Initialization();
         PositionInit();
         RotatementInit();
     }
@@ -45,7 +49,6 @@ public class Object : MonoBehaviour
         //변수 초기화
         z = 0;
     }
-
     private void PositionInit()
     {
         transform.position = GetRealPosition();
@@ -55,6 +58,17 @@ public class Object : MonoBehaviour
         Quaternion quart;
         quart = GetRotation();
         GetComponent<Transform>().rotation= quart;
+    }
+
+    public void SaveObject()
+    {
+        grid.elementList.Add(gameObject);
+
+        if (objectType <= PuzzleIn.OBJECT_AND_TILE_BOUNDARY)
+            grid.tileList.Add(gameObject);
+
+        else if (objectType > PuzzleIn.OBJECT_AND_TILE_BOUNDARY)
+            grid.objectList.Add(gameObject);
     }
 
     public Vector3Int GetPosition()

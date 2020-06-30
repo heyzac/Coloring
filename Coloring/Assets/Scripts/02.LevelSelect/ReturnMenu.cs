@@ -5,12 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class ReturnMenu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     public void OnClickReturnMenu()
     {
         SceneManager.LoadScene("SceneMainMenu");

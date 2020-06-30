@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class Line : MonoBehaviour
 {
-    public GridScript grid;
+    private GridScript grid;
     private GameObject outputer;
     private Outputer outputerComponent;
 
@@ -18,16 +19,31 @@ public class Line : MonoBehaviour
 
     private LineRenderer lineRenderer;
 
-    private void Start()
+    private void Awake()
     {
         EventInitialization();
+    }
+    private void Start()
+    {
 
-        //클래스 초기화
+    }
+    public void OnEnable()
+    {
+        Initialization();
+    }
+    private void OnDestroy()
+    {
+        PuzzleIn.ObjectLoad -= this.Pointment;
+        PuzzleObject.OutputerLining -= this.Pointment;
+    }
+
+    private void Initialization()
+    {
         outputer = transform.parent.gameObject;
         lineRenderer = GetComponent<LineRenderer>();
         outputerComponent = outputer.GetComponent<Outputer>();
+        grid = outputerComponent.grid;
     }
-
     private void VariableInitialization()
     {
         _lineColorTheme = outputerComponent.lineColorTheme;
@@ -44,13 +60,11 @@ public class Line : MonoBehaviour
         _lineRealPointList.Clear();
         lineRenderer.positionCount = 0;
     }
-
     private void EventInitialization()
     {
-        PuzzleIn.LoadComplete += Pointment;
-        PuzzleObject.OutputerLining += Pointment;
+        PuzzleIn.ObjectLoad += this.Pointment;
+        PuzzleObject.OutputerLining += this.Pointment;
     }
-
     private Color ColorInitialization(int colorTheme)
     {
         Color color;
@@ -115,7 +129,6 @@ public class Line : MonoBehaviour
         Vector3Int startLinePoint = outputerPoint;
         return startLinePoint;
     }
-
     private Vector3Int GetAdditionPoint()
     {
         Vector3Int prevLinePoint = _linePointList[_linePointList.Count - 1];
@@ -140,6 +153,7 @@ public class Line : MonoBehaviour
             if (tileObject == null)
             {
                 Debug.LogWarning("objectPoint : " + objectPoint + " 's tileObject is Null");
+                LineEnd(null);
                 return new Vector3Int();
             } else {; }
 
@@ -152,7 +166,6 @@ public class Line : MonoBehaviour
 
         return objectPoint;
     }
-
     private Vector3 GetEndPoint()
     {
         Vector3 endRealPoint = _lineRealPointList[_lineRealPointList.Count - 1];
@@ -178,12 +191,69 @@ public class Line : MonoBehaviour
 
         return endRealPoint;
     }
+    private Vector3 GetLineRealPointment(Vector3Int v3)
+    {
+        Vector3 RealPoint = new Vector3(v3.x * grid.argumentedCellSize + PuzzleIn.gridAdjusment,
+            v3.y * grid.argumentedCellSize + PuzzleIn.gridAdjusment, 0);
+        return RealPoint;
+    }
+    private Vector3Int GetCompareObjectPosition(Vector3Int prevPos, int iterator)
+    {
+        switch (_lineDirect)
+        {
+            case 0:
+                goto case 2;
+            case 2:
+                return new Vector3Int(iterator, prevPos.y, 0);
+
+            case 1:
+                goto case 3;
+            case 3:
+                return new Vector3Int(prevPos.x, iterator, 0);
+
+            default:
+                Debug.LogWarning("Not Allowed LineDirection");
+                return new Vector3Int(0, 0, 0);
+        }
+    }
+    private Vector2Int GetIteratorValuement(Vector3Int prevLinePoint)
+    {
+        Vector2Int v2 = new Vector2Int(0, 1);
+
+        switch (_lineDirect)
+        {
+            case 0:
+                v2.x = prevLinePoint.x;
+                v2.y = 1;
+                break;
+
+            case 1:
+                v2.x = prevLinePoint.y;
+                v2.y = -1;
+                break;
+
+            case 2:
+                v2.x = prevLinePoint.x;
+                v2.y = -1;
+                break;
+
+            case 3:
+                v2.x = prevLinePoint.y;
+                v2.y = 1;
+                break;
+
+            default:
+                Debug.LogWarning("Not Allowed LineDirection");
+                break;
+        }
+
+        return v2;
+    }
 
     private void LineEnd(GameObject obj)
     {
         _isLineEnd = true;
     }
-
     private void LineCarculate(GameObject obj)
     {
         switch (obj.GetComponent<Object>().objectType)
@@ -229,7 +299,6 @@ public class Line : MonoBehaviour
                 break;
         }
     }
-
     private bool IsLineSkewerable(GameObject tileObject, GameObject puzzleObject)
     {
         if (tileObject == null)
@@ -240,66 +309,5 @@ public class Line : MonoBehaviour
             return true;
 
         return false;
-    }
-
-    private Vector3 GetLineRealPointment(Vector3Int v3)
-    {
-        Vector3 RealPoint = new Vector3(v3.x * grid.argumentedCellSize + PuzzleIn.gridAdjusment,
-            v3.y * grid.argumentedCellSize + PuzzleIn.gridAdjusment, 0);
-        return RealPoint;
-    }
-
-    private Vector3Int GetCompareObjectPosition(Vector3Int prevPos, int iterator)
-    {
-        switch (_lineDirect)
-        {
-            case 0:
-                goto case 2;
-            case 2:
-                return new Vector3Int(iterator, prevPos.y, 0);
-
-            case 1:
-                goto case 3;
-            case 3:
-                return new Vector3Int(prevPos.x, iterator, 0);
-
-            default:
-                Debug.LogWarning("Not Allowed LineDirection");
-                return new Vector3Int(0, 0, 0);
-        }
-    }
-
-    private Vector2Int GetIteratorValuement(Vector3Int prevLinePoint)
-    {
-        Vector2Int v2 = new Vector2Int(0, 1);
-
-        switch (_lineDirect)
-        {
-            case 0:
-                v2.x = prevLinePoint.x;
-                v2.y = 1;
-                break;
-
-            case 1:
-                v2.x = prevLinePoint.y;
-                v2.y = -1;
-                break;
-
-            case 2:
-                v2.x = prevLinePoint.x;
-                v2.y = -1;
-                break;
-
-            case 3:
-                v2.x = prevLinePoint.y;
-                v2.y = 1;
-                break;
-
-            default:
-                Debug.LogWarning("Not Allowed LineDirection");
-                break;
-        }
-
-        return v2;
     }
 }

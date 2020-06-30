@@ -18,33 +18,34 @@ public class PuzzleObject : Object,
     private int _yTemp;
 
     //스프라이트 값 관련
-    [SerializeField] protected Sprite spriteNormal;
-    [SerializeField] protected Sprite spriteSelect;
-    [SerializeField] protected Sprite spriteOnLine;
+    protected Sprite spriteNormal;
+    protected Sprite spriteSelect;
+    protected Sprite spriteOnLine;
+
+    private void OnDestroy()
+    {
+        PuzzleIn.LineBegin -= this.ObjectSpriteInit;
+    }
 
     protected void ObjectStatement()
     {
         EventInitialization();
-        ObjectSpriteInit();
         ObjectMovement();
 
-        SaveObject();
+        //SaveObject();
     }
-
     private void ObjectSpriteInit()
     {
-        GetComponent<Image>().sprite = spriteNormal;
+        if (gameObject == null)
+        {
+            Debug.Log(1);
+            return;
+        }
+        gameObject.GetComponent<Image>().sprite = spriteNormal;
     }
-
     private void EventInitialization()
     {
-        PuzzleIn.LineBegin += ObjectSpriteInit;
-    }
-
-    private void SaveObject()
-    {
-        grid.objectList.Add(gameObject);
-        grid.elementList.Add(gameObject);
+        PuzzleIn.LineBegin += this.ObjectSpriteInit;
     }
 
     private bool IsMoveablePosition(Vector3Int v3)
@@ -123,8 +124,7 @@ public class PuzzleObject : Object,
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        ObjectRotatement();
-        MouseClick();
+
     }
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -134,6 +134,7 @@ public class PuzzleObject : Object,
     public void OnPointerUp(PointerEventData eventData)
     {
         PuzzleIn.isMousePressing = false;
+        ObjectRotatement();
         MouseClick();
     }
     public void OnDrag(PointerEventData eventData)
@@ -158,7 +159,6 @@ public class PuzzleObject : Object,
     {
         ObjectSpritement();
         ZPositionSetting();
-
         PuzzleIn.Lines();
         OutputerLining();
     }

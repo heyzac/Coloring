@@ -92,6 +92,3 @@ MonoBehaviour:
   rotate: 0
   objectType: 0
   pos: {x: 0, y: 0, z: 0}
-  xReal: 0
-  yReal: 0
-  objectComponent: {fileID: 0}

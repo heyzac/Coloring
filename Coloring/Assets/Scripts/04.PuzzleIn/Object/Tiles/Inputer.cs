@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Inputer : TileObject
+public class Inputer : TileObject, IInputer
 {
     public int lineColorTheme;
+
+    public int SoundTheme { get => lineColorTheme; }
 
     private void Start()
     {
         First();
         ValueInitialization();
+        CompleteRequirementAddition();
         TileStatement();
         Statement();
     }
@@ -30,8 +33,19 @@ public class Inputer : TileObject
         GetComponent<Image>().sprite = puzzleIn.inputerOnLine[lineColorTheme];
     }
 
+    public void CompleteRequirementAddition()
+    {
+        grid.completeRequires++;
+    }
+
     public void Input()
     {
-        Debug.Log("Inputer has been Operated");
+        grid.inputerOperating++;
+        SoundAddition();
+    }
+
+    public void SoundAddition()
+    {
+
     }
 }

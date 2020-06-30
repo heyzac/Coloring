@@ -8,11 +8,10 @@ public class Outputer : TileObject
     public int lineColorTheme;
 
     private Line line;
-
     private void Start()
     {
-        First();
         Initialization();
+        First();
         TileStatement();
         Spritement();
     }
@@ -20,7 +19,6 @@ public class Outputer : TileObject
     private void Initialization()
     {
         line = transform.GetChild(0).GetComponent<Line>();
-        line.grid = this.grid;
         objectType = PuzzleIn.OUTPUTER_TYPE;
     }
 

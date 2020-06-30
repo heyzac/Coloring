@@ -40,7 +40,6 @@ public class Reflector : PuzzleObject
 
     public void SpriteChangeFromLine(int lineColorTheme)
     {
-        Debug.Log("hey");
         spriteOnLine = puzzleIn.reflectorOnLine[lineColorTheme];
         GetComponent<Image>().sprite = spriteOnLine;
     }

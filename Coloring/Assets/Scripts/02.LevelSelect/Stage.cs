@@ -5,17 +5,17 @@ using UnityEngine.UI;
 
 public class Stage : MonoBehaviour
 {
-    //클래스 선언
-    public LevelSelect levelSelect = new LevelSelect();
-
     //상수 선언
     public const int LEVEL_MAX_COUNT = 12;
 
     //전역 변수 선언
-    public int stageNumber = 0;
+    public int stageNumber;
 
     //변수 선언
-    public int lastClearedLevel = 0;
+    public int lastClearedLevel;
+
+    //클래스 선언
+    public LevelSelect levelSelect;
 
     //스프라이트 선언
     public Sprite levelImage;
@@ -25,7 +25,7 @@ public class Stage : MonoBehaviour
     private Sprite stageLeftArrowImage;
 
     //게임오브젝트 선언
-    public GameObject[] levels = new GameObject[LEVEL_MAX_COUNT];
+    public GameObject[] levels;
 
     public GameObject background;
     public GameObject stageText;
@@ -53,7 +53,6 @@ public class Stage : MonoBehaviour
         backgroundImage = levelSelect.backgroundImageArr[stageNumber];
         stageRightArrowImage = levelSelect.stageRightArrowImageArr[stageNumber];
         stageLeftArrowImage = levelSelect.stageLeftArrowImageArr[stageNumber];
-        Debug.Log(stageNumber);
 
         //게임 오브젝트 자동으로 찾기
         for (int i = 0; i < LEVEL_MAX_COUNT; i++)
@@ -64,7 +63,7 @@ public class Stage : MonoBehaviour
         }
 
         background = transform.Find("Background").gameObject;
-        stageText = transform.Find("StageText").gameObject;       
+        stageText = transform.Find("StageText").gameObject;
         leftArrow = transform.Find("LeftArrow").gameObject;
         rightArrow = transform.Find("RightArrow").gameObject;
         returnText = transform.Find("Return").gameObject;
