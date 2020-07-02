@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,8 +9,9 @@ public class PuzzleIn : MonoBehaviour
 {
     //이벤트 핸들러
     public delegate void GameStatement();
-    public static event GameStatement ObjectLoad;
-    public static event GameStatement LineBegin;
+    public static event GameStatement EventObjectLoad;
+    public static event GameStatement EventLineBegin;
+    public static event GameStatement EventLevelClear;
 
     //수 많은 상수
     private const int MAX_THEME_COUNT = 3;
@@ -56,6 +58,9 @@ public class PuzzleIn : MonoBehaviour
     //프리팹 저장
     public GameObject[] gameElement;
 
+    //스테이지 컴포넌트 리스트
+    public static List<Stage> stages = new List<Stage>();
+
     void Awake()
     {
         Array.Resize<Sprite>(ref wallTile, MAX_THEME_COUNT);
@@ -75,18 +80,23 @@ public class PuzzleIn : MonoBehaviour
     }
     void Start()
     {
-        Lines();
-        LoadComplete();
+        LineBeginEventGenerate();
+        LoadCompleteEventGenerate();
     }
 
-    public static void Lines()
+    public static void LineBeginEventGenerate()
     {
-        LineBegin();
+        EventLineBegin();
     }
-    public static void LoadComplete()
+    public static void LoadCompleteEventGenerate()
     {
-        if (ObjectLoad != null)
-            ObjectLoad();
+        if (EventObjectLoad != null)
+            EventObjectLoad();
+    }
+    public static void LevelClearEventGenerate()
+    {
+        if (EventLevelClear != null)
+            EventLevelClear();
     }
 
 }

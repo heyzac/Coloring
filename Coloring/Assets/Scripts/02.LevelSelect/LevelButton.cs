@@ -57,6 +57,7 @@ public class LevelButton : MonoBehaviour
 
         //로딩씬 로드
         SceneManager.LoadScene("SceneLoading");
+        transform.parent.gameObject.SetActive(false);
 
         return;
     }

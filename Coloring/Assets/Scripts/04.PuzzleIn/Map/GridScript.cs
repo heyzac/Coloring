@@ -44,7 +44,7 @@ public class GridScript : MonoBehaviour
 
     private void EventInitialization()
     {
-        PuzzleIn.LineBegin += InputerOperationCountInit;
+        PuzzleIn.EventLineBegin += InputerOperationCountInit;
     }
     private void InputerOperationCountInit()
     {
@@ -280,5 +280,24 @@ public class GridScript : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public void ClearChecking()
+    {
+        if (inputerOperating == completeRequires)
+        {
+            Debug.Log("Claer");
+            PuzzleIn.LevelClearEventGenerate();
+        }
+    }
+
+    public void NextLevel()
+    {
+
+    }
+
+    public void AgainLevel()
+    {
+
     }
 }

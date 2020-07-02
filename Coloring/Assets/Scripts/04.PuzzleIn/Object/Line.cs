@@ -33,8 +33,8 @@ public class Line : MonoBehaviour
     }
     private void OnDestroy()
     {
-        PuzzleIn.ObjectLoad -= this.Pointment;
-        PuzzleObject.OutputerLining -= this.Pointment;
+        PuzzleIn.EventObjectLoad -= this.Pointment;
+        PuzzleObject.EventObjectMove -= this.Pointment;
     }
 
     private void Initialization()
@@ -62,8 +62,8 @@ public class Line : MonoBehaviour
     }
     private void EventInitialization()
     {
-        PuzzleIn.ObjectLoad += this.Pointment;
-        PuzzleObject.OutputerLining += this.Pointment;
+        PuzzleIn.EventObjectLoad += this.Pointment;
+        PuzzleObject.EventObjectMove += this.Pointment;
     }
     private Color ColorInitialization(int colorTheme)
     {

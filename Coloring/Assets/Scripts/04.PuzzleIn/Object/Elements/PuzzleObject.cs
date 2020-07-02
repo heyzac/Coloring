@@ -10,7 +10,7 @@ public class PuzzleObject : Object,
     IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
     public delegate void LineStatement();
-    public static event LineStatement OutputerLining;
+    public static event LineStatement EventObjectMove;
 
     //다유동 변수
     private Ray _rayment;
@@ -24,7 +24,7 @@ public class PuzzleObject : Object,
 
     private void OnDestroy()
     {
-        PuzzleIn.LineBegin -= this.ObjectSpriteInit;
+        PuzzleIn.EventLineBegin -= this.ObjectSpriteInit;
     }
 
     protected void ObjectStatement()
@@ -45,7 +45,7 @@ public class PuzzleObject : Object,
     }
     private void EventInitialization()
     {
-        PuzzleIn.LineBegin += this.ObjectSpriteInit;
+        PuzzleIn.EventLineBegin += this.ObjectSpriteInit;
     }
 
     private bool IsMoveablePosition(Vector3Int v3)
@@ -159,7 +159,7 @@ public class PuzzleObject : Object,
     {
         ObjectSpritement();
         ZPositionSetting();
-        PuzzleIn.Lines();
-        OutputerLining();
+        PuzzleIn.LineBeginEventGenerate();
+        EventObjectMove();
     }
 }

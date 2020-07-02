@@ -42,10 +42,11 @@ public class Inputer : TileObject, IInputer
     {
         grid.inputerOperating++;
         SoundAddition();
+        grid.ClearChecking();
     }
 
     public void SoundAddition()
     {
-
+        Debug.Log(lineColorTheme + "번 악기 출력");
     }
 }

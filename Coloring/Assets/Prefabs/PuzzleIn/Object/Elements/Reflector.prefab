@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2457659303004630939}
   - component: {fileID: 2457659303004630938}
   - component: {fileID: 2457659303004630916}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Reflector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,4 +92,4 @@ MonoBehaviour:
   rotate: 0
   objectType: 4
   pos: {x: 0, y: 0, z: 0}
-  colorTheme: 
+  grid: {fileID: 0}

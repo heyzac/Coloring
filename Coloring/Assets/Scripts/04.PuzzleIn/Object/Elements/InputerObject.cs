@@ -27,8 +27,9 @@ public class InputerObject : PuzzleObject, IInputer
 
     public void Input()
     {
-        CompleteRequirementAddition();
+        grid.inputerOperating++;
         SoundAddition();
+        grid.ClearChecking();
     }
 
     public void SoundAddition()

@@ -35,8 +35,9 @@ public class Stage : MonoBehaviour
 
     void Awake()
     {
+        DontDestroyOnLoad(gameObject);
+        PuzzleIn.stages.Add(this);
         Initialization();
-        
     }
 
     void Start()
