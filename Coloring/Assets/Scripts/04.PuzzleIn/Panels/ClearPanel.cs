@@ -5,13 +5,15 @@ using UnityEngine.PlayerLoop;
 
 public class ClearPanel : MonoBehaviour
 {
+    public GridScript grid;
     private void Awake()
     {
         EventInitialization();
+        Initialization();
     }
     void Start()
     {
-        Initialization();
+
     }
 
     private void EventInitialization()
@@ -22,7 +24,7 @@ public class ClearPanel : MonoBehaviour
 
     private void Initialization()
     {
-
+        //grid = transform.parent.Find("Grid").GetComponent<GridScript>();
     }
 
     private void ActiveSetting()
@@ -37,13 +39,12 @@ public class ClearPanel : MonoBehaviour
         {
             PuzzleIn.stages[PuzzleIn.currentStage].lastClearedLevel++;
         }
-
-
     }
 
     public void OnAgainLevelButton()
     {
-
+        gameObject.SetActive(false);
+        grid.LoadLevel(PuzzleIn.currentStage, PuzzleIn.currentLevel);
     }
 
     public void OnLevelSelectButton()
@@ -53,8 +54,8 @@ public class ClearPanel : MonoBehaviour
 
     public void OnNextLevelSelectButton()
     {
-        PuzzleIn.currentLevel++;
-        if (PuzzleIn.currentLevel == Stage.LEVEL_MAX_COUNT)
+        gameObject.SetActive(false);
+        if (++PuzzleIn.currentLevel == Stage.LEVEL_MAX_COUNT)
         {
             PuzzleIn.currentLevel = 0;
             LevelSelect.presentStage++;
@@ -66,5 +67,6 @@ public class ClearPanel : MonoBehaviour
             }
         }
 
+        grid.LoadLevel(PuzzleIn.currentStage, PuzzleIn.currentLevel);
     }
 }

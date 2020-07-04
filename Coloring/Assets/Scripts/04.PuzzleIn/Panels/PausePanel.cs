@@ -9,9 +9,15 @@ public class PausePanel : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public void OnPauseTextButton()
+    {
+        gameObject.SetActive(true);
+    }
+
     public void OnResumeTextButton()
     {
         Debug.Log("Game has been Resumed");
+        gameObject.SetActive(false);
     }
 
     public void OnResolveLevelTextButton()

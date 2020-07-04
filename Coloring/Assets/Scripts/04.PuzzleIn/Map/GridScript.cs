@@ -29,17 +29,11 @@ public class GridScript : MonoBehaviour
         puzzleIn = GameObject.Find("ScriptObject").GetComponent<PuzzleIn>();
         argumentedCellSize = GetComponent<Grid>().cellSize.x;
     }
-
     private void Start()
     {
         levelData = ScriptableObject.CreateInstance<MapData>();
-        if (PuzzleIn.currentStage + 1 == 0 || PuzzleIn.currentLevel + 1 == 0)
-        {
-            Debug.LogWarning("Level " + (PuzzleIn.currentStage + 1) + "-" + (PuzzleIn.currentLevel + 1) + "cannot Found");
-        }
-        levelData = (MapData)AssetDatabase.LoadAssetAtPath
-            ("Assets/Resources/Levels/Level " + (PuzzleIn.currentStage + 1) + "-" + (PuzzleIn.currentLevel + 1) + ".asset", typeof(MapData));
-        LoadLevel();
+        string loadPath = "Assets/Resources/Levels/Level " + (PuzzleIn.currentStage + 1) + "-" + (PuzzleIn.currentLevel + 1) + ".asset";
+        LoadLevel(PuzzleIn.currentLevel, PuzzleIn.currentStage);
     }
 
     private void EventInitialization()
@@ -168,11 +162,19 @@ public class GridScript : MonoBehaviour
         AssetDatabase.Refresh();
     }
 
-    public void LoadLevel()
+    public void LoadLevel(int targetStage, int targetLevel)
     {
-        if(levelData == null)
+        if (PuzzleIn.currentStage + 1 == 0 || PuzzleIn.currentLevel + 1 == 0)
         {
-            Debug.LogWarning("Cannot Find Level's Data");
+            Debug.LogWarning("Level " + (PuzzleIn.currentStage + 1) + "-" + (PuzzleIn.currentLevel + 1) + "cannot Found");
+        }
+
+        string loadPath = "Assets/Resources/Levels/Level " + (targetStage + 1) + "-" + (targetLevel + 1) + ".asset";
+        levelData = (MapData)AssetDatabase.LoadAssetAtPath(loadPath, typeof(MapData));
+
+        if (levelData == null)
+        {
+            Debug.LogWarning("Cannot Find Level's Data : " + loadPath);
             return;
         }
         ObjectLoading();
@@ -289,15 +291,5 @@ public class GridScript : MonoBehaviour
             Debug.Log("Claer");
             PuzzleIn.LevelClearEventGenerate();
         }
-    }
-
-    public void NextLevel()
-    {
-
-    }
-
-    public void AgainLevel()
-    {
-
     }
 }

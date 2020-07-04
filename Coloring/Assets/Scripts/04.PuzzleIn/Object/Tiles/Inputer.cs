@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class Inputer : TileObject, IInputer
 {
     public int lineColorTheme;
-
     public int SoundTheme { get => lineColorTheme; }
+    public bool IsActive { get; }
 
     private void Start()
     {

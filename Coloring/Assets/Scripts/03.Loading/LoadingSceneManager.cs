@@ -34,7 +34,7 @@ public class LoadingSceneManager : MonoBehaviour
             if(timer > 2.00)
                 operation.allowSceneActivation = true;
 
-            Debug.Log(timer);
+            //Debug.Log(timer);
 
         }
     }

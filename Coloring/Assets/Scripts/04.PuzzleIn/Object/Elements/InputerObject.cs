@@ -7,7 +7,7 @@ public class InputerObject : PuzzleObject, IInputer
 {
     public int lineColorTheme;
     public int SoundTheme { get => colorTheme; }
-
+    public bool IsActive { get; }
 
     private void Start()
     {

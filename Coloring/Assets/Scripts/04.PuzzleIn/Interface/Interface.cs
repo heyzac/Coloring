@@ -12,6 +12,7 @@ public interface IOnLine
 public interface IInputer
 {
     int SoundTheme { get; }
+    bool IsActive { get; }
 
     void CompleteRequirementAddition();
     void Input();
